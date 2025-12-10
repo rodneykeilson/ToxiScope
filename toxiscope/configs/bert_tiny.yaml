@@ -1,0 +1,58 @@
+# ToxiScope: Minimal Training Configuration
+# Designed for CPU training in ~30-60 minutes
+# Uses tiny-bert and minimal data
+
+model:
+  name: "prajjwal1/bert-tiny"  # Only 4.4M params (vs 67M for DistilBERT)
+  num_labels: 7
+  max_length: 64  # Very short for speed
+
+training:
+  batch_size: 32  # Larger batch, fewer steps
+  gradient_accumulation_steps: 1
+  learning_rate: 5e-4  # Higher LR for small model
+  weight_decay: 0.01
+  num_epochs: 1  # Single epoch
+  warmup_ratio: 0.1
+  max_grad_norm: 1.0
+  
+  optimizer: "adamw"
+  adam_epsilon: 1e-8
+  scheduler: "linear"
+  
+  loss_function: "focal"
+  focal_gamma: 2.0
+  focal_alpha: 0.25
+  
+  early_stopping_patience: 2
+  early_stopping_threshold: 0.001
+  
+  eval_steps: 200
+  save_steps: 200
+  logging_steps: 25
+  
+  fp16: false
+  dataloader_num_workers: 0
+
+data:
+  train_path: "data/tiny/train.csv"
+  val_path: "data/tiny/val.csv"
+  test_path: "data/sampled/test.csv"
+  text_column: "body_clean"
+  label_columns:
+    - "toxic"
+    - "severe_toxic"
+    - "obscene"
+    - "threat"
+    - "insult"
+    - "identity_hate"
+    - "racism"
+
+output:
+  dir: "outputs/models/bert_tiny"
+  save_total_limit: 2
+
+wandb:
+  project: "toxiscope"
+  name: "bert-tiny-minimal"
+  tags: ["bert-tiny", "minimal", "cpu"]

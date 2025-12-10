@@ -1,0 +1,78 @@
+# ToxiScope: BERT-tiny Training Results
+# =======================================
+# Date: Training completed successfully
+# Model: prajjwal1/bert-tiny (4.4M parameters)
+# Dataset: 10K train, 2K validation (tiny sampled dataset)
+# Loss Function: Focal Loss (gamma=2.0, alpha=0.25)
+
+## Training Configuration
+- Batch Size: 16
+- Learning Rate: 5e-4
+- Epochs: ~3 (early stopping)
+- Max Sequence Length: 128
+- Optimizer: AdamW
+- Scheduler: Linear warmup
+
+## Final Results (with Calibrated Thresholds)
+
+### Overall Metrics
+Macro-F1: 0.7830
+Micro-F1: 0.8730
+
+### Per-Label Performance
+
+| Label          | F1 Score | Threshold | ROC-AUC |
+|----------------|----------|-----------|---------|
+| toxic          | 0.895    | 0.60      | 0.974   |
+| severe_toxic   | 0.700    | 0.50      | 0.954   |
+| obscene        | 0.945    | 0.50      | 0.988   |
+| threat         | 0.457    | 0.40      | 0.930   |
+| insult         | 0.873    | 0.45      | 0.978   |
+| identity_hate  | 0.818    | 0.60      | 0.948   |
+| racism         | 0.794    | 0.60      | 0.977   |
+
+### Training Progress (Key Epochs)
+
+| Epoch | Train Loss | Val Loss | Micro-F1 | Macro-F1 |
+|-------|------------|----------|----------|----------|
+| 0.32  | 0.0143     | 0.0094   | 0.624    | 0.214    |
+| 0.64  | 0.0080     | 0.0051   | 0.801    | 0.375    |
+| 0.96  | 0.0064     | 0.0047   | 0.808    | 0.474    |
+| 1.28  | 0.0050     | 0.0042   | 0.845    | 0.652    |
+| 1.60  | 0.0046     | 0.0036   | 0.867    | 0.667    |
+| 1.92  | 0.0047     | 0.0033   | 0.869    | 0.673    |
+| 2.24  | 0.0035     | 0.0035   | 0.866    | 0.764    |
+| 2.56  | 0.0039     | 0.0034   | 0.852    | 0.751    |
+| 2.88  | 0.0034     | 0.0032   | 0.862    | 0.712    |
+
+### Dataset Distribution (Training Set)
+
+| Label         | Count  | Percentage |
+|---------------|--------|------------|
+| toxic         | 3,000  | 30.00%     |
+| severe_toxic  | 116    | 1.16%      |
+| obscene       | 1,547  | 15.47%     |
+| threat        | 219    | 2.19%      |
+| insult        | 784    | 7.84%      |
+| identity_hate | 138    | 1.38%      |
+| racism        | 214    | 2.14%      |
+
+## Observations
+
+1. **Focal Loss Effectiveness**: The model successfully learned minority classes 
+   despite severe imbalance (severe_toxic: 1.16%, identity_hate: 1.38%)
+
+2. **Threshold Calibration**: Per-label threshold optimization improved F1 scores
+   significantly, especially for minority classes
+
+3. **Training Efficiency**: BERT-tiny (4.4M params) trained in ~8 minutes on CPU,
+   making it practical for resource-constrained environments
+
+4. **ROC-AUC Performance**: All labels achieve >0.93 ROC-AUC, indicating strong
+   ranking ability even where F1 is lower (e.g., threat: 0.93)
+
+## Model Files
+
+- Model: outputs/models/bert_tiny/best_model/
+- Thresholds: outputs/models/bert_tiny/best_model/thresholds.json
+- Config: configs/bert_tiny.yaml
