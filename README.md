@@ -4,7 +4,6 @@
 
 <h1 align="center">ToxiScope</h1>
 <p align="center"><b>Efficient Transformer-Based Multilabel Toxic Comment Detection for Gaming Communities</b></p>
-<p align="center">[Rodney Keilson](https://github.com/rodneykeilson), Felix Willie, and Dylan Pratama Khu</p>
 
 ToxiScope is a multilabel toxicity detection system for gaming communities, featuring a BERT-tiny transformer fine-tuned with Focal Loss for efficient CPU inference.
 

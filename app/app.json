@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Commulyzer",
-    "slug": "commulyzer",
+    "name": "ToxiScope",
+    "slug": "toxiscope",
     "version": "0.1.0",
     "orientation": "portrait",
     "scheme": "commulyzer",
