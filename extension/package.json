@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild src/content.ts src/popup.ts --bundle --format=esm --outdir=dist --target=es2020",
+    "build": "esbuild src/content.ts src/popup.ts --bundle --format=esm --outdir=dist --target=es2020 && cp src/popup.html dist/popup.html",
     "watch": "esbuild src/content.ts src/popup.ts --bundle --format=esm --outdir=dist --target=es2020 --watch",
     "lint": "eslint src --ext .ts"
   },

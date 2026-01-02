@@ -90,9 +90,15 @@ export async function loadArtifacts(): Promise<ModelArtifacts> {
     return cachedArtifacts;
   }
 
+  console.log('[ToxiScope] Loading model artifacts...');
+  const startTime = performance.now();
+
   const metadata = await fetchJson<MetadataFile>('metadata.json');
   const vectorizerSource = metadata?.vectorizer ?? (metadata as unknown as RawVectorizer | undefined);
   const vectorizer = coerceVectorizer(vectorizerSource);
+  
+  console.log('[ToxiScope] Metadata loaded, fetching weights...');
+  
   const thresholds = await fetchJson<Record<string, number>>('thresholds.json').catch(() => {
     if (metadata?.thresholds) {
       return metadata.thresholds;
@@ -106,10 +112,14 @@ export async function loadArtifacts(): Promise<ModelArtifacts> {
     ? metadata.labels.filter((label): label is string => typeof label === 'string')
     : [];
   const labels = labelsRaw.length > 0 ? labelsRaw : metadataLabels.length > 0 ? metadataLabels : Object.keys(thresholds);
+  
   const coefficients = await fetchJson<number[][]>('classifier_coefficients.json');
+  console.log('[ToxiScope] Coefficients loaded');
+  
   const intercepts = await fetchJson<number[]>('classifier_intercepts.json');
   const vocabularyObj = await fetchJson<Record<string, number>>('vocabulary_combined.json');
   const vocabulary = new Map<string, number>(Object.entries(vocabularyObj));
+  console.log(`[ToxiScope] Vocabulary loaded (${vocabulary.size} entries)`);
 
   if (labels.length === 0) {
     throw new Error('No labels found in artifacts.');
@@ -129,6 +139,9 @@ export async function loadArtifacts(): Promise<ModelArtifacts> {
     thresholds,
     labels,
   };
+
+  const endTime = performance.now();
+  console.log(`[ToxiScope] Model artifacts loaded in ${((endTime - startTime) / 1000).toFixed(2)}s`);
 
   return cachedArtifacts;
 }

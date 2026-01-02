@@ -88,16 +88,19 @@ function injectStyles(): void {
   style.id = 'toxiscope-style';
   style.textContent = `
     .toxiscope-mask {
-      background-color: rgba(248, 113, 113, 0.15);
-      color: #b91c1c;
-      font-style: italic;
-      border-radius: 0.25rem;
-      padding: 0.1rem 0.2rem;
+      background-color: rgba(248, 113, 113, 0.15) !important;
+      color: #b91c1c !important;
+      font-style: italic !important;
+      border-radius: 0.25rem !important;
+      padding: 0.1rem 0.2rem !important;
+      display: inline !important;
     }
     .toxiscope-highlight {
-      background-color: rgba(255, 193, 7, 0.3);
-      border-bottom: 2px solid #f44336;
-      border-radius: 2px;
+      background-color: rgba(255, 193, 7, 0.3) !important;
+      border-bottom: 2px solid #f44336 !important;
+      border-radius: 2px !important;
+      display: inline !important;
+    }
     }
     .toxiscope-highlight[data-toxicity-labels]:hover::after {
       content: attr(data-toxicity-labels);
@@ -200,6 +203,7 @@ function analyseTextNode(node: Text, artifacts: Artifacts): void {
 
     // Track toxic content
     stats.toxicCount++;
+    console.log(`[ToxiScope] Detected toxic content: "${trimmed.substring(0, 30)}..." labels: ${result.activeLabels.join(', ')}`);
     result.activeLabels.forEach(label => {
       stats.labelCounts[label] = (stats.labelCounts[label] || 0) + 1;
     });
@@ -238,6 +242,7 @@ function analyseTextNode(node: Text, artifacts: Artifacts): void {
 }
 
 function walkAndAnalyse(root: Node, artifacts: Artifacts): void {
+  const nodesToProcess: Text[] = [];
   const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       if (processedNodes.has(node)) {
@@ -274,8 +279,13 @@ function walkAndAnalyse(root: Node, artifacts: Artifacts): void {
 
   let current: Node | null = treeWalker.nextNode();
   while (current) {
-    analyseTextNode(current as Text, artifacts);
+    nodesToProcess.push(current as Text);
     current = treeWalker.nextNode();
+  }
+
+  if (nodesToProcess.length > 0) {
+    console.log(`[ToxiScope] Scanning ${nodesToProcess.length} new text nodes...`);
+    nodesToProcess.forEach(node => analyseTextNode(node, artifacts));
   }
 }
 
@@ -296,7 +306,7 @@ async function performScan(): Promise<void> {
       saveStats();
     }
   } catch (error) {
-    console.error('ToxiScope failed to load artifacts:', error);
+    console.error('[ToxiScope] Failed to load artifacts:', error);
     observer?.disconnect();
   }
 }
@@ -354,6 +364,8 @@ async function init(): Promise<void> {
   if (!document.body) {
     return;
   }
+  
+  console.log('[ToxiScope] Initializing content script...');
   
   // Load settings first
   await loadSettings();
