@@ -1,10 +1,14 @@
-# ToxiScope 🔬
+<p align="center">
+  <img src="assets/logo/ToxiScope.jpg" width="200" alt="ToxiScope Logo">
+</p>
 
-**Efficient Transformer-Based Multilabel Toxic Comment Detection for Gaming Communities**
+<h1 align="center">ToxiScope</h1>
+<p align="center"><b>Efficient Transformer-Based Multilabel Toxic Comment Detection for Gaming Communities</b></p>
+<p align="center">[Rodney Keilson](https://github.com/rodneykeilson), Felix Willie, and Dylan Pratama Khu</p>
 
-ToxiScope is a multilabel toxicity detection system for gaming communities, featuring BERT-tiny transformer fine-tuned with Focal Loss for efficient CPU inference.
+ToxiScope is a multilabel toxicity detection system for gaming communities, featuring a BERT-tiny transformer fine-tuned with Focal Loss for efficient CPU inference.
 
-## 🏆 Results
+## Results
 
 | Metric | Score |
 |--------|-------|
@@ -25,7 +29,7 @@ ToxiScope is a multilabel toxicity detection system for gaming communities, feat
 | identity_hate | 0.766 | 0.976 | 0.55 |
 | racism | 0.828 | 0.992 | 0.50 |
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ToxiScope/
@@ -65,11 +69,10 @@ ToxiScope/
 │   └── training/              # Train/val/test splits
 ├── patterns/                   # Regex pattern libraries (TSV)
 ├── outputs/                    # Trained models & reports
-├── journal/                    # LaTeX research paper
 └── requirements.txt
 ```
 
-## 🎮 Toxicity Labels
+## Toxicity Labels
 
 | Label | Description | Training % |
 |-------|-------------|------------|
@@ -81,7 +84,7 @@ ToxiScope/
 | `identity_hate` | Hate speech targeting identity | 0.84% |
 | `racism` | Racially discriminatory content | 1.32% |
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -145,17 +148,16 @@ python -m scripts.data_pipeline.label_comments --input data/processed/merged/mer
 python -m scripts.data_pipeline.clean_comments --input data/processed/merged/merged_comments_labeled.csv
 ```
 
-## 📖 Documentation
+## Documentation
 
 - [Extension README](extension/README.md) - Browser extension guide
 - [Mobile App README](app/README.md) - React Native app guide
-- [Research Paper](journal/final_journal.tex) - Full methodology and results
 
-## 🔬 Architecture
+## Architecture
 
 ### Why BERT-tiny?
 
-We use BERT-tiny (`prajjwal1/bert-tiny`) [1] with 4.4M parameters:
+We use BERT-tiny (`prajjwal1/bert-tiny`) with 4.4M parameters:
 
 | Model | Parameters | CPU Training | Inference | F1 |
 |-------|-----------|--------------|-----------|-----|
@@ -165,38 +167,48 @@ We use BERT-tiny (`prajjwal1/bert-tiny`) [1] with 4.4M parameters:
 | DeBERTa-v3 | 184M | ~24 hrs | ~80ms | ~0.86 |
 
 Advantages:
-- ✅ **CPU Training**: No GPU required
-- ✅ **Fast Iteration**: 5-10 experiments/day
-- ✅ **Memory Efficient**: <2GB RAM
-- ✅ **Real-time Ready**: Sub-10ms inference
+- **CPU Training**: No GPU required
+- **Fast Iteration**: 5-10 experiments/day
+- **Memory Efficient**: <2GB RAM
+- **Real-time Ready**: Sub-10ms inference
 
 ### Focal Loss
 
-We use Focal Loss [2] to handle class imbalance:
+We use Focal Loss to handle class imbalance:
 
 $$FL(p_t) = -\alpha_t (1 - p_t)^\gamma \log(p_t)$$
 
 With γ=2.0 and α=0.25, this down-weights easy examples and focuses on hard negatives.
 
-## 📚 References
+## References
 
-1. I. Turc et al., "Well-Read Students Learn Better: On the Importance of Pre-training Compact Models," arXiv:1908.08962, 2019.
-2. T.Y. Lin et al., "Focal Loss for Dense Object Detection," ICCV 2017.
-3. P. He et al., "DeBERTa: Decoding-enhanced BERT with Disentangled Attention," ICLR 2021.
-4. T. Davidson et al., "Automated Hate Speech Detection and the Problem of Offensive Language," ICWSM 2017.
-5. D. Kwak and J. Blackburn, "Linguistic Analysis of Toxic Behavior in an Online Video Game," Social Informatics, 2015.
+1. D. Kwak and J. Blackburn, "Linguistic Analysis of Toxic Behavior in an Online Video Game," in *Social Informatics*, Springer, 2015.
+2. T. Davidson, D. Warmsley, M. Macy, and I. Weber, "Automated hate speech detection and the problem of offensive language," in *Proc. ICWSM*, 2017.
+3. P. He, X. Liu, J. Gao, and W. Chen, "DeBERTa: Decoding-enhanced BERT with Disentangled Attention," in *Proc. ICLR*, 2021.
+4. Jigsaw, "Toxic comment classification challenge," *Kaggle Competition*, 2018.
+5. M. Mozafari, R. Farahbakhsh, and N. Crespi, "A BERT-based transfer learning approach for hate speech detection in online social media," in *Complex Networks and Their Applications VIII*, Springer, 2020.
+6. T. Caselli, V. Basile, J. Mitrovic, and M. Granitzer, "HateBERT: Retraining BERT for abusive language detection in English," in *Proc. 5th Workshop on Online Abuse and Harms*, 2021.
+7. L. Hanu and Unitary team, "Detoxify," *GitHub repository*, 2020.
+8. Y. Liu, M. Ott, N. Goyal, et al., "RoBERTa: A Robustly Optimized BERT Pretraining Approach," *arXiv preprint arXiv:1907.11692*, 2019.
+9. K. Shores, Y. He, K. Swanenburg, et al., "The Identification of Deviance and its Impact on Retention in a Multiplayer Game," in *Proc. CSCW*, 2014.
+10. R. Martens, J. Hamari, H. Breidung, and A. Becker, "Going green: How to study gamer behavior in-game," in *Proc. DiGRA*, 2015.
+11. T. Y. Lin, P. Goyal, R. Girshick, K. He, and P. Dollar, "Focal loss for dense object detection," in *Proc. ICCV*, 2017.
+12. T. Ridnik, E. Ben-Baruch, N. Zamir, et al., "Asymmetric loss for multi-label classification," in *Proc. ICCV*, 2021.
+13. Z. C. Lipton, C. Elkan, and B. Narayanaswamy, "Optimal thresholding of classifiers to maximize F1 measure," in *ECML PKDD*, 2014.
+14. I. Turc, M. Chang, K. Lee, and K. Toutanova, "Well-Read Students Learn Better: On the Importance of Pre-training Compact Models," *arXiv preprint arXiv:1908.08962*, 2019.
+15. H. Inoue, "Multi-sample dropout for accelerated training and better generalization," *arXiv preprint arXiv:1905.09788*, 2019.
 
-## 📝 Citation
+## Citation
 
 ```bibtex
 @article{toxiscope2026,
   title={ToxiScope: Efficient Transformer-Based Multilabel Toxic Comment Detection for Gaming Communities},
-  author={Keilson, Rodney and Willie, Felix and Khu, Dylan Pratama},
+  author={Rodney Keilson and Felix Willie and Dylan Pratama Khu},
   journal={Universitas Mikroskil},
   year={2026}
 }
 ```
 
-## 📄 License
+## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
