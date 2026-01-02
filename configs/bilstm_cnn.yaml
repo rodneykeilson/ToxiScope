@@ -1,0 +1,107 @@
+# ToxiScope Model Configurations
+# BiLSTM-CNN Baseline (Non-Transformer Baseline)
+
+model:
+  name: "bilstm-cnn"
+  architecture: "bilstm_cnn"
+  
+  # Embedding
+  embedding_dim: 300
+  pretrained_embeddings: null  # Can use fasttext-id or word2vec-id
+  freeze_embeddings: false
+  
+  # BiLSTM
+  lstm_hidden_size: 256
+  lstm_num_layers: 2
+  lstm_dropout: 0.3
+  lstm_bidirectional: true
+  
+  # CNN
+  cnn_filters: 256
+  cnn_kernel_sizes: [3, 4, 5]
+  cnn_dropout: 0.5
+  
+  # Classification head
+  fc_hidden_size: 512
+  num_labels: 7
+
+labels:
+  - toxic
+  - severe_toxic
+  - obscene
+  - threat
+  - insult
+  - identity_hate
+  - racism
+
+training:
+  learning_rate: 1.0e-3
+  weight_decay: 1.0e-4
+  warmup_ratio: 0.0
+  num_epochs: 20
+  batch_size: 64
+  gradient_accumulation_steps: 1
+  max_grad_norm: 5.0
+  
+  max_length: 200  # Token length
+  
+  optimizer: "adam"
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1.0e-8
+  
+  scheduler: "reduce_on_plateau"
+  scheduler_patience: 3
+  scheduler_factor: 0.5
+  
+  loss_type: "bce_weighted"
+  
+  use_class_weights: true
+  
+  fp16: false
+  
+  save_strategy: "epoch"
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "macro_f1"
+  greater_is_better: true
+  
+  early_stopping_patience: 5
+
+evaluation:
+  eval_strategy: "epoch"
+  per_device_eval_batch_size: 128
+  threshold_calibration: true
+
+data:
+  train_path: "data/training/processed/train.csv"
+  val_path: "data/training/processed/val.csv"
+  test_path: "data/training/processed/test.csv"
+  text_column: "body_clean"
+  
+  # Vocabulary
+  vocab_size: 50000
+  min_freq: 3
+  
+  augmentation:
+    enabled: true
+    methods:
+      - random_deletion
+    aug_probability: 0.1
+
+wandb:
+  project: "toxiscope"
+  entity: null
+  run_name: "bilstm-cnn-baseline"
+  tags:
+    - bilstm
+    - cnn
+    - baseline
+  log_model: true
+
+output:
+  model_dir: "outputs/models/bilstm_cnn"
+  report_dir: "outputs/reports"
+  
+seed: 42
+device: "auto"

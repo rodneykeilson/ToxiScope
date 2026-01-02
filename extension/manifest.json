@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "ToxiScope - Gaming Toxicity Detection",
+  "description": "Real-time toxicity detection for gaming communities using ML-based multi-label classification. Detects 7 toxicity types.",
+  "version": "0.2.0",
+  "action": {
+    "default_title": "ToxiScope",
+    "default_popup": "dist/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/model/metadata.json",
+        "assets/model/labels.txt",
+        "assets/model/thresholds.json",
+        "assets/model/classifier_coefficients.json",
+        "assets/model/classifier_intercepts.json",
+        "assets/model/vocabulary_combined.json"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

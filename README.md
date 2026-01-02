@@ -1,60 +1,202 @@
-# Commulyzer
+# ToxiScope 🔬
 
-Commulyzer collects Reddit community discussions, normalises the raw data, and produces rule-based toxicity labels for downstream analysis.
+**Efficient Transformer-Based Multilabel Toxic Comment Detection for Gaming Communities**
 
-## Data Acquisition
+ToxiScope is a multilabel toxicity detection system for gaming communities, featuring BERT-tiny transformer fine-tuned with Focal Loss for efficient CPU inference.
 
-Reddit data is fetched using [ScrapiReddit](https://github.com/rodneykeilson/ScrapiReddit), a dedicated scraping tool created and maintained by the author of this repository. This ensures full control over the scraping process and data provenance.
+## 🏆 Results
 
-## Capabilities
+| Metric | Score |
+|--------|-------|
+| **Macro-F1** | **0.817** |
+| **Micro-F1** | **0.889** |
+| Training Time | ~26 min (CPU) |
+| Inference | <10ms |
 
-- Import top-post listings, permalinks, and full post/comment payloads from ScrapiReddit outputs (multiple subreddits per run).
-- Merge every `comments.csv` under `data/raw/reddit/` into a single dataset with `merge-comments.py` (adds a `source_subreddit` column).
-- Optionally clean labeled outputs with `clean_comments.py` (drop blank bodies, dedupe comment text).
-- Run `label-comments.py` to assign multilabel toxicity scores (toxic, severe_toxic, obscene, threat, insult, identity_hate, racism) plus per-subreddit statistics.
-- Maintain extensible regex libraries under `patterns/`—drop additional TSV rows to expand coverage without code changes.
+### Per-Label Performance
 
-## Setup
+| Label | F1 Score | ROC-AUC | Threshold |
+|-------|----------|---------|-----------|
+| toxic | 0.903 | 0.978 | 0.50 |
+| severe_toxic | 0.744 | 0.932 | 0.40 |
+| obscene | 0.942 | 0.991 | 0.30 |
+| threat | 0.654 | 0.979 | 0.45 |
+| insult | 0.881 | 0.993 | 0.50 |
+| identity_hate | 0.766 | 0.976 | 0.55 |
+| racism | 0.828 | 0.992 | 0.50 |
 
-```powershell
-# install dependencies
-pip install requests pandas tqdm
+## 📁 Project Structure
 
-# optional: confirm CLI options
-python label-comments.py --help
+```
+ToxiScope/
+├── src/                        # Deep learning training code
+│   ├── train.py               # HuggingFace Trainer pipeline
+│   ├── evaluate.py            # Model evaluation
+│   ├── inference.py           # Run predictions
+│   ├── visualize.py           # Confusion matrices, ROC curves
+│   ├── models/                # Model architectures
+│   │   └── focal_loss.py     # Focal Loss for class imbalance
+│   └── preprocessing/         # Data preprocessing
+├── configs/                    # Training configurations (YAML)
+│   ├── bert_tiny.yaml         # BERT-tiny config
+│   ├── bert_tiny_medium.yaml  # BERT-tiny on 50K dataset
+│   └── ...
+├── scripts/                    # Utility scripts
+│   ├── data_pipeline/         # Data processing
+│   │   ├── merge_comments.py
+│   │   ├── label_comments.py
+│   │   ├── clean_comments.py
+│   │   └── create_sample_dataset.py
+│   ├── baseline/              # TF-IDF baseline model
+│   │   ├── inference.py
+│   │   └── export_to_json.py
+│   └── export/                # Exporting results
+│       └── results_to_latex.py
+├── notebooks/                  # Jupyter notebooks
+│   └── 03_ablation_study.ipynb
+├── extension/                  # Chrome browser extension (ToxiScope Mask)
+│   ├── src/                   # TypeScript source (content.ts, popup.ts)
+│   ├── assets/model/          # TF-IDF model (JSON)
+│   └── manifest.json
+├── app/                        # React Native mobile app
+├── data/                       # Datasets
+│   ├── raw/                   # Scraped Reddit data
+│   ├── processed/             # Cleaned and labeled
+│   └── training/              # Train/val/test splits
+├── patterns/                   # Regex pattern libraries (TSV)
+├── outputs/                    # Trained models & reports
+├── journal/                    # LaTeX research paper
+└── requirements.txt
 ```
 
-## Typical Workflow
+## 🎮 Toxicity Labels
+
+| Label | Description | Training % |
+|-------|-------------|------------|
+| `toxic` | General toxic/negative content | 17.92% |
+| `severe_toxic` | Highly offensive content | 0.73% |
+| `obscene` | Vulgar or profane language | 9.22% |
+| `threat` | Threats of violence | 1.24% |
+| `insult` | Personal attacks | 4.65% |
+| `identity_hate` | Hate speech targeting identity | 0.84% |
+| `racism` | Racially discriminatory content | 1.32% |
+
+## 🚀 Quick Start
+
+### Installation
 
 ```powershell
-# 1. Scrape one or more subreddits using ScrapiReddit (see its README for usage)
-#    Place the resulting JSON/CSV files under data/raw/reddit/<subreddit>/
+# Create virtual environment
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 
-# 2. Merge all subreddit comments into a single file
-python merge-comments.py
-# -> data/processed/merged/merged_comments.csv
-
-# 3. Label the merged dataset (creates *_labeled.csv next to the input)
-python label-comments.py --input data/processed/merged/merged_comments.csv
-# -> data/processed/merged/merged_comments_labeled.csv
-
-# 4. (Optional) Clean the labeled file (removes blank bodies, deduplicates comment text)
-python clean-comments.py --input data/processed/merged/merged_comments_labeled.csv
-# -> data/processed/merged/merged_comments_labeled_cleaned.csv
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-The labeling script prints overall totals and per-subreddit toxicity ratios. When you pass `--threshold` the binary cut-off changes (default 0.5). Override the pattern directory or provide extra regexes with `--pattern-dir` and `--extra-patterns-dir` respectively.
+### Training BERT-tiny
 
-## Data Layout
+```powershell
+# Train with default config
+python src/train.py --config configs/bert_tiny.yaml
 
-- `data/raw/reddit/<subreddit>/` – scraped assets (`posts.json`, `links.json`, `post_jsons/*.json`, optional CSVs) from ScrapiReddit.
-- `data/processed/merged/` – merged, labeled, and cleaned comment datasets.
-- `patterns/` – base regex TSV files per label (`<label>.tsv`).
+# Train on 50K dataset
+python src/train.py --config configs/bert_tiny_medium.yaml
+```
 
-The generated CSVs retain all original comment metadata and add `_score`, `_bin`, and a `labels` column containing the active tags.
+### Inference
 
-## Notes
+```powershell
+# Transformer inference
+python src/inference.py --text "your comment here"
 
-- All pattern files include offensive language solely for detection purposes.
-- Respect Reddit rate limits; tune ScrapiReddit's delay and limit options as needed.
-- A VPN or proxy may be required where reddit.com is blocked.
+# Baseline TF-IDF inference
+python -m scripts.baseline.inference --text "your comment here"
+```
+
+```python
+# Python API
+from src.inference import ToxiScopePredictor
+
+predictor = ToxiScopePredictor("outputs/models/bert_tiny/best_model")
+result = predictor.predict("You're such a noob, uninstall the game")
+# {"is_toxic": True, "active_labels": ["toxic", "insult"], ...}
+```
+
+### Chrome Extension
+
+```powershell
+cd extension
+npm install
+npm run build
+# Load unpacked extension in Chrome
+```
+
+### Data Pipeline
+
+```powershell
+# Merge scraped Reddit comments
+python -m scripts.data_pipeline.merge_comments
+
+# Label with toxicity patterns
+python -m scripts.data_pipeline.label_comments --input data/processed/merged/merged_comments.csv
+
+# Clean and deduplicate
+python -m scripts.data_pipeline.clean_comments --input data/processed/merged/merged_comments_labeled.csv
+```
+
+## 📖 Documentation
+
+- [Extension README](extension/README.md) - Browser extension guide
+- [Mobile App README](app/README.md) - React Native app guide
+- [Research Paper](journal/final_journal.tex) - Full methodology and results
+
+## 🔬 Architecture
+
+### Why BERT-tiny?
+
+We use BERT-tiny (`prajjwal1/bert-tiny`) [1] with 4.4M parameters:
+
+| Model | Parameters | CPU Training | Inference | F1 |
+|-------|-----------|--------------|-----------|-----|
+| **BERT-tiny** | 4.4M | ~26 min | <10ms | 0.817 |
+| DistilBERT | 66M | ~8 hrs | ~30ms | ~0.83 |
+| BERT-base | 110M | ~16 hrs | ~50ms | ~0.84 |
+| DeBERTa-v3 | 184M | ~24 hrs | ~80ms | ~0.86 |
+
+Advantages:
+- ✅ **CPU Training**: No GPU required
+- ✅ **Fast Iteration**: 5-10 experiments/day
+- ✅ **Memory Efficient**: <2GB RAM
+- ✅ **Real-time Ready**: Sub-10ms inference
+
+### Focal Loss
+
+We use Focal Loss [2] to handle class imbalance:
+
+$$FL(p_t) = -\alpha_t (1 - p_t)^\gamma \log(p_t)$$
+
+With γ=2.0 and α=0.25, this down-weights easy examples and focuses on hard negatives.
+
+## 📚 References
+
+1. I. Turc et al., "Well-Read Students Learn Better: On the Importance of Pre-training Compact Models," arXiv:1908.08962, 2019.
+2. T.Y. Lin et al., "Focal Loss for Dense Object Detection," ICCV 2017.
+3. P. He et al., "DeBERTa: Decoding-enhanced BERT with Disentangled Attention," ICLR 2021.
+4. T. Davidson et al., "Automated Hate Speech Detection and the Problem of Offensive Language," ICWSM 2017.
+5. D. Kwak and J. Blackburn, "Linguistic Analysis of Toxic Behavior in an Online Video Game," Social Informatics, 2015.
+
+## 📝 Citation
+
+```bibtex
+@article{toxiscope2026,
+  title={ToxiScope: Efficient Transformer-Based Multilabel Toxic Comment Detection for Gaming Communities},
+  author={Keilson, Rodney and Willie, Felix and Khu, Dylan Pratama},
+  journal={Universitas Mikroskil},
+  year={2026}
+}
+```
+
+## 📄 License
+
+MIT

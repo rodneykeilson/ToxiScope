@@ -1,0 +1,84 @@
+# ToxiScope Configuration: DeBERTa-v3-large
+# Highest accuracy variant for ablation study
+# Reference: He et al. (2021) "DeBERTa: Decoding-enhanced BERT with Disentangled Attention"
+
+model:
+  name: "microsoft/deberta-v3-large"
+  num_labels: 7
+  problem_type: "multi_label_classification"
+  
+  # ToxiScope enhancements
+  pooling_strategy: "attention"  # cls, mean, attention
+  use_multi_sample_dropout: true
+  dropout_samples: 5
+  hidden_dropout_prob: 0.1
+  attention_probs_dropout_prob: 0.1
+  classifier_dropout: 0.15
+
+data:
+  train_path: "data/training/processed/train.csv"
+  val_path: "data/training/processed/val.csv"
+  test_path: "data/training/processed/test.csv"
+  text_column: "body_clean"
+  label_columns:
+    - "toxic"
+    - "severe_toxic"
+    - "obscene"
+    - "threat"
+    - "insult"
+    - "identity_hate"
+    - "racism"
+  max_length: 256
+
+training:
+  output_dir: "outputs/models/deberta_large"
+  num_train_epochs: 4
+  per_device_train_batch_size: 8
+  per_device_eval_batch_size: 16
+  gradient_accumulation_steps: 4
+  learning_rate: 1.0e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  lr_scheduler_type: "cosine"
+  
+  # Loss function for class imbalance
+  loss_function: "focal"
+  focal_gamma: 2.0
+  focal_alpha: 0.25
+  
+  # Optimization
+  fp16: true
+  dataloader_num_workers: 4
+  
+  # Evaluation & checkpointing
+  eval_strategy: "steps"
+  eval_steps: 500
+  save_strategy: "steps"
+  save_steps: 500
+  save_total_limit: 2
+  load_best_model_at_end: true
+  metric_for_best_model: "macro_f1"
+  greater_is_better: true
+  
+  # Early stopping
+  early_stopping_patience: 3
+  early_stopping_threshold: 0.001
+
+cross_validation:
+  enabled: false  # Expensive for large model
+  n_folds: 5
+  stratified: true
+
+threshold_calibration:
+  enabled: true
+  method: "f1_optimal"
+  search_range: [0.1, 0.95]
+  search_steps: 50
+
+wandb:
+  project: "toxiscope"
+  entity: null
+  run_name: "deberta-v3-large"
+  tags: ["deberta-large", "toxicity", "multilabel", "gaming"]
+
+seed: 42

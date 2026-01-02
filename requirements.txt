@@ -1,19 +1,48 @@
-# Core data processing
-pandas>=2.0
-numpy>=1.26
-scikit-learn>=1.4
-tqdm>=4.66
-joblib>=1.3
+# =============================================================================
+# ToxiScope / Commulyzer: Unified Dependencies
+# =============================================================================
+# This is the main requirements file for the entire project.
+# For deep learning model training, see also: toxiscope/requirements.txt
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Core Data Processing
+# -----------------------------------------------------------------------------
+pandas>=2.1.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+scipy>=1.12.0
+tqdm>=4.66.0
+joblib>=1.3.0
+
+# Stratified Splitting for Multilabel
 iterative-stratification>=0.1.7
 
-# NLP / modeling
-torch>=2.1
-transformers>=4.40
-accelerate>=0.30
-evaluate>=0.4
+# -----------------------------------------------------------------------------
+# NLP / Deep Learning
+# -----------------------------------------------------------------------------
+torch>=2.1.0
+transformers>=4.40.0
+accelerate>=0.30.0
+evaluate>=0.4.0
+tokenizers>=0.15.0
+safetensors>=0.4.0
+huggingface-hub>=0.21.0
+datasets>=2.18.0
 
-# Data acquisition
-requests>=2.31
+# -----------------------------------------------------------------------------
+# Data Acquisition
+# -----------------------------------------------------------------------------
+requests>=2.31.0
 
-# Optional visualization
-matplotlib>=3.8
+# -----------------------------------------------------------------------------
+# Visualization
+# -----------------------------------------------------------------------------
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# -----------------------------------------------------------------------------
+# Configuration & Utilities
+# -----------------------------------------------------------------------------
+pyyaml>=6.0.0
+python-dotenv>=1.0.0

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToxiScope</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 320px;
+      min-height: 400px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #e0e0e0;
+      padding: 16px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00d9ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      font-size: 28px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .stats-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .stats-title {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: #00d9ff;
+    }
+
+    .stat-value.warning {
+      color: #ffc107;
+    }
+
+    .stat-value.danger {
+      color: #f44336;
+    }
+
+    .labels-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .label-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 8px 12px;
+      text-align: center;
+    }
+
+    .label-name {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .label-count {
+      font-size: 18px;
+      font-weight: bold;
+      color: #ff6b6b;
+    }
+
+    .toggle-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 24px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #444;
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #00d9ff;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-text {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .refresh-btn {
+      background: linear-gradient(135deg, #00d9ff 0%, #00a8cc 100%);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .refresh-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+    }
+
+    .model-info {
+      background: rgba(0, 217, 255, 0.1);
+      border: 1px solid rgba(0, 217, 255, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .model-info-title {
+      font-size: 12px;
+      color: #00d9ff;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .model-info-text {
+      font-size: 11px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <span class="logo-icon">🔬</span>
+      ToxiScope
+    </div>
+    <div class="subtitle">Gaming Community Toxicity Detection</div>
+  </div>
+
+  <div class="model-info">
+    <div class="model-info-title">Model: TF-IDF + Logistic Regression</div>
+    <div class="model-info-text">Lightweight baseline for real-time browser inference. 7 toxicity labels detected.</div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stats-title">Page Statistics</div>
+    <div class="stat-row">
+      <span class="stat-label">Comments Scanned</span>
+      <span class="stat-value" id="scanned-count">0</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Toxic Comments Found</span>
+      <span class="stat-value warning" id="toxic-count">0</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Toxicity Rate</span>
+      <span class="stat-value" id="toxicity-rate">0%</span>
+    </div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stats-title">Detections by Label</div>
+    <div class="labels-grid">
+      <div class="label-badge">
+        <div class="label-name">Toxic</div>
+        <div class="label-count" id="label-toxic">0</div>
+      </div>
+      <div class="label-badge">
+        <div class="label-name">Obscene</div>
+        <div class="label-count" id="label-obscene">0</div>
+      </div>
+      <div class="label-badge">
+        <div class="label-name">Insult</div>
+        <div class="label-count" id="label-insult">0</div>
+      </div>
+      <div class="label-badge">
+        <div class="label-name">Threat</div>
+        <div class="label-count" id="label-threat">0</div>
+      </div>
+      <div class="label-badge">
+        <div class="label-name">Identity Hate</div>
+        <div class="label-count" id="label-identity_hate">0</div>
+      </div>
+      <div class="label-badge">
+        <div class="label-name">Racism</div>
+        <div class="label-count" id="label-racism">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toggle-container">
+    <div class="toggle-row">
+      <span class="toggle-label">Enable Detection</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-enabled" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">Show Placeholders</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-placeholders" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">Highlight Only</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-highlight">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <button class="refresh-btn" id="refresh-btn">🔄 Rescan Page</button>
+
+  <div class="footer">
+    <div class="footer-text">ToxiScope v0.2.0 • Powered by Machine Learning</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

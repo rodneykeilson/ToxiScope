@@ -1,0 +1,178 @@
+# ToxiScope Error Analysis Report
+
+## Summary
+
+This report analyzes misclassified samples to identify common failure patterns.
+
+## Error Counts
+
+| Label | False Positives | False Negatives |
+|-------|-----------------|-----------------|
+| toxic | 205 | 188 |
+| threat | 60 | 50 |
+| identity_hate | 15 | 35 |
+| severe_toxic | 7 | 33 |
+| obscene | 82 | 46 |
+| insult | 58 | 75 |
+| racism | 20 | 32 |
+
+## Detailed Analysis
+
+### Toxic
+
+#### False Negatives (Missed Detection)
+
+1. "Sad honestly the spear fits her the most f$ck zhongli , hutao and xiao..."
+
+2. "Yes..I will not kill ur allies.. I WILL KILL U AND UR ALLIES..."
+
+3. "should i uninstall the app on june 12?..."
+
+4. "That's drop dead gorgeous!!..."
+
+5. "I don't think it is particularly cocky to call out your rank before making an opinion. Most people are lower ranks. Most people are in gold and silver. Their opinions are naturally from a less experie..."
+
+6. "Officer break your neck Zhu..."
+
+7. "So I might as well get my copy directly from the cracker?..."
+
+8. "And for any non-weebs, in Japanese that’s the equivalent of “SLUT SLUT SLUT”..."
+
+9. "Do you mean, The River Fag?..."
+
+10. ""Uhh, C-Commander Newell, sir, Mr. Icefrog, sir..." The pair turned around to see somone in a Dota Corps uniform. Black collared shirt, black pants, the Dota insignia on his lapel. Judging from the pa..."
+
+#### False Positives (Over-Detection)
+
+1. "20 damage buff on bolt means I'm going mid you shitsnack...."
+
+2. "#NENEROBO KILL HIM!!!..."
+
+3. "YOU REALLY SHOULD'VE BROUGHT THE KNIGHTS OF FAVONIUS..."
+
+4. "I imagine it must be insanely difficult to nitpick a video game for not being realistic..."
+
+5. "They have simple said it's fair use to ingest a book into your llm dataset but what we are waiting on is if they are still going to get in trouble for acquiring those books illegally. It seems like th..."
+
+6. "I just downed a pint of nitro fuel..."
+
+7. ""we'll give you a silly banner if you kill 50 bunnies!"..."
+
+8. "No way, I'm not touching that shit with a 10-ft pole. I just wanna view links I come across then leave like I was never there...."
+
+9. "While little kids probably aren't gonna just go outside and kill sharks, negative depictions in media really do have an effect. The film Jaws really did lead to increased levels of hunting of sharks. ..."
+
+10. "That's a crazy reach but I'll delusionally support it..."
+
+### Threat
+
+#### False Negatives (Missed Detection)
+
+1. "i dont play prosekai. im not even in the fandom. ive read the story front to back and im HURT..."
+
+2. "This game involves a lot of luck. There's no doubt about it. Of course better players, make their own luck and can get out of shitty situations and win more often. But there is a lot of luck involved...."
+
+3. "Played Genshin since day 1 but only did the 2 of the 4 dungeons in BoTw. One day I'll beat it but I hate farming for new weapons after breaking them...."
+
+4. "It's the same approach they took with microtransactions in games. At first it was some crappy horse armor that cost way too much and everyone pushed back. But they kept trying with new games, it would..."
+
+5. "Automation is coming for you, CronGPT...."
+
+6. "I see you Mehoff 😂 Halver is coming for you..."
+
+7. "if i get qiqi i will find you..."
+
+8. "I’d want mine to say “I’m coming for you”..."
+
+9. "I'm not sure if this actually exist because I am not an avid Rust player but can't pros just make a server for pro Rust content creator rather than play on a server with majority new players? If train..."
+
+10. "I'm just scared this shitty community and Activision's laziness with anticheat is going to kill cross play for other games in the future. My friends and I can all play together for the first time in y..."
+
+#### False Positives (Over-Detection)
+
+1. "I just watched this video 10 times in a row, it makes me so happy. With 50 people on your team you quickly realize how many fuck heads exist in this game. Luckily most of the time you just get to kill..."
+
+2. "Not sure how you didn’t kill yourself with that missile lol..."
+
+3. "I guess you could say it was a Bouncy Buzzer Beater..."
+
+4. "funny enough, once the mages shield is down you can just destroy them into oblivion with a nice charged ice arrow..."
+
+5. "The idea of the PvP server isn't just pure KoS. You can PvP perfectly fine but keep in mind that the other people playing on the server are content creators looking to create content. Getting randomly..."
+
+6. "How about you have 3 min to kill 3. Then people wouldn't camp. If you killed the 3, you also get a load out for dessert...."
+
+7. "Getting some crazy gear that lets them kill nakeds easier? What are you even talking about? Of course as you progress you're going to be more effective at killing everything, naked or otherwise...."
+
+8. "Get off the your high horse. Let me guess, you never used meta weapons because it's 'not skillful', and you use a crossbow to get all of your kills? You're telling me if you kill someone and they drop..."
+
+9. "NICKMERCS be like "Oh my god try this new OP, broken, 1 shot, 0 Recoil Bruen class setup. IT DESTROYS" me trying this class. Only thing I destroy are the birds flying around that you can't even kill b..."
+
+10. "The RP server is mostly for Abe's friends (OTV + friends) who were focused on RP in the previous server, the second server is more of a "trial" server for those wanting to get into the first server to..."
+
+### Identity Hate
+
+#### False Negatives (Missed Detection)
+
+1. "Daequan my nigga..."
+
+2. "Mark-Ass Brownie..."
+
+3. "So how did the cracker signature get to the steam release? You think the cracker released his script? They obviously used the files from the crack, not code to strip their own version, that’s the whol..."
+
+4. "Markass brownie..."
+
+5. "Yes, yes you can, it all depends on how the recoil is implemented. All these people advocating that adding some RNG to recoil means the entire recoil will be random and based on luck have no clue what..."
+
+6. "don't cross the river fag..."
+
+7. "Oh my God😇😩Oh my God😇😩😱 Baby 👶😹you done took👊 this shit💩💩🔥 to the nother motherfuckin'🙈🙉👉👌👩 level! 🎮💻Now a neighborhood🏡🏡 nigga💩👌💯 Like me😒😞 ain't supposed🚫🚫 to be gettin' 👅👅no pussy🍑🍑 like this 😜Godd..."
+
+8. "If you had developed your crack in a complete clean room setting than actually the code the cracker wrote would be protected as partially their IP and they could send a C&D to the company...."
+
+9. "You’d have to imagine they’d at least do the most basic of checks before publishing it! Ubisoft (the publisher) would have to sign something with their private key to verify these files are legit, unt..."
+
+10. "lmao, i literally change the cracker's username in the hex code to avoid multiplayer conflicts (and to have my crew tag be what i want it to be)..."
+
+#### False Positives (Over-Detection)
+
+1. "This is how you know the developer has done right by the community; people freely and comfortably joking about evil practices being added to the game. I see no fear or backlash in these comments, just..."
+
+2. "YOU REALLY SHOULD'VE BROUGHT THE KNIGHTS OF FAVONIUS..."
+
+3. "Sir please just tell us if u want a Double or Tripple Cheese Burger :(..."
+
+4. "tartar sauce*..."
+
+5. "I had no idea this was a thing. Apparently the comment the meme is of is 3 years old. Only started hearing about this meme since yesterday on the r/EscapefromTarkov sub...."
+
+6. "Yes, you're right. However, RAZOR still owns the work they did to crack this software, they still own how they did it. Rockstar might argue they did violate the DMCA by cracking a protection scheme, h..."
+
+7. "I think it's a wanted behavior, to avoid finishing someone that just got down (with explosives for exemple, you don't want to be finished by a second hand grenade)..."
+
+8. "3 video cards, another quick frustrating session with gimp, and a little prayer the whole thing doesn't topple over..."
+
+9. "Oof is a the sound made when a person is winded (ex. Punch, bag, fall, etc). It is just a sound effect. I've involuntarily made that sound when various accidents hit me in the diaphragm!..."
+
+10. "I don't mind bullying, it lets me know immediately that the person is a fucktard and doesn't deserve basic courtesy...."
+
+## Common Failure Patterns
+
+### False Negative Patterns (Missed Toxicity)
+1. **Sarcasm and Irony**: Model struggles with sarcastic toxic comments
+2. **Gaming-specific Insults**: Subtle gaming slang not recognized
+3. **Implicit Threats**: Indirect threatening language missed
+4. **Code-switching**: Mixed language patterns confuse the model
+
+### False Positive Patterns (Over-Detection)
+1. **Quoted Content**: Discussing toxic content triggers detection
+2. **Gaming Terminology**: Competitive gaming terms mistaken for insults
+3. **Neutral Profanity**: Non-hostile use of profane words
+4. **Context-dependent**: Phrases that need context to interpret
+
+## Recommendations
+
+1. **Data Augmentation**: Add more sarcasm/irony examples
+2. **Threshold Tuning**: Adjust thresholds per-label for balance
+3. **Context Window**: Consider longer context for ambiguous cases
+4. **Domain Adaptation**: Fine-tune on more gaming-specific data
