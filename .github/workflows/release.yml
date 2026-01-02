@@ -1,0 +1,47 @@
+name: Release ToxiScope Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-extension:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./extension
+        run: npm install
+
+      - name: Build extension
+        working-directory: ./extension
+        run: |
+          npm run build
+          # Ensure popup.html is in dist if not already copied by build script
+          cp src/popup.html dist/popup.html || true
+
+      - name: Package extension
+        working-directory: ./extension
+        run: |
+          mkdir -p release
+          zip -r release/toxiscope-extension.zip dist icons assets manifest.json
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: extension/release/toxiscope-extension.zip
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
