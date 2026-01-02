@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ToxiScope - Gaming Toxicity Detection",
   "description": "Real-time toxicity detection for gaming communities using ML-based multi-label classification. Detects 7 toxicity types.",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "action": {
     "default_title": "ToxiScope",
     "default_popup": "dist/popup.html",
